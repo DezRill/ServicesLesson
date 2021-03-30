@@ -1,35 +1,38 @@
 package com.dezrill.serviceslesson;
 
-public class Data {
-    private ObservableString inTxt1, inTxt2, inTxt3;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 
-    public Data() {
-        inTxt1=new ObservableString();
-        inTxt2=new ObservableString();
-        inTxt3=new ObservableString();
-    }
+public class Data extends BaseObservable {
+    private String inTxt1, inTxt2, inTxt3;
 
     public void setInTxt1(String inTxt1) {
-        this.inTxt1.set(inTxt1);
+        this.inTxt1=inTxt1;
+        notifyPropertyChanged(BR.inTxt1);
     }
 
     public void setInTxt2(String inTxt2) {
-            this.inTxt2.set(inTxt2);
+            this.inTxt2=inTxt2;
+            notifyPropertyChanged(BR.inTxt2);
     }
 
     public void setInTxt3(String inTxt3) {
-        this.inTxt3.set(inTxt3);
+        this.inTxt3=inTxt3;
+        notifyPropertyChanged(BR.inTxt3);
     }
 
+    @Bindable
     public String getInTxt1() {
-        return inTxt1.get();
+        return inTxt1;
     }
 
+    @Bindable
     public String getInTxt2() {
-        return inTxt2.get();
+        return inTxt2;
     }
 
+    @Bindable
     public String getInTxt3() {
-        return inTxt3.get();
+        return inTxt3;
     }
 }

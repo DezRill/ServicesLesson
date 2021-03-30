@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class DataService extends Service {
-    final String LOG_TAG = "myLogs";
+    public  static final String LOG_TAG = "myLogs";
     ExecutorService es;
 
     @Override
@@ -27,8 +27,8 @@ public class DataService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TAG, "DataService onStartCommand");
 
-        int time =intent.getIntExtra(TextHandleViewModel.PARAM_TIME, 1);
-        PendingIntent pi=intent.getParcelableExtra(TextHandleViewModel.PARAM_PINTENT);
+        int time=intent.getIntExtra(MainActivity.PARAM_TIME, 1);
+        PendingIntent pi=intent.getParcelableExtra(MainActivity.PARAM_PINTENT);
 
         RunProc run=new RunProc(time, startId, pi);
         es.execute(run);
@@ -39,6 +39,7 @@ public class DataService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d(LOG_TAG, "DataService onDestroy");
     }
 
     @Nullable
@@ -53,8 +54,8 @@ public class DataService extends Service {
         PendingIntent pi;
 
         public RunProc(int time, int startId, PendingIntent pi) {
-            this.time=time;
             this.startId=startId;
+            this.time=time;
             this.pi=pi;
             Log.d(LOG_TAG, "RunProc#"+startId+" start, time="+time);
         }
@@ -63,11 +64,11 @@ public class DataService extends Service {
         public void run() {
             Log.d(LOG_TAG, "RunProc#"+startId+" start, time="+time);
             try {
-                pi.send(TextHandleViewModel.STATUS_START);
+                pi.send(MainActivity.STATUS_START);
                 TimeUnit.SECONDS.sleep(time);
 
-                Intent intent=new Intent().putExtra(TextHandleViewModel.PARAM_RESULT, time*100);
-                pi.send(DataService.this, TextHandleViewModel.STATUS_FINISH, intent);
+                Intent intent=new Intent().putExtra(MainActivity.PARAM_RESULT, time*100);
+                pi.send(DataService.this, MainActivity.STATUS_FINISH, intent);
             }
             catch (PendingIntent.CanceledException | InterruptedException e) {
                 e.printStackTrace();
